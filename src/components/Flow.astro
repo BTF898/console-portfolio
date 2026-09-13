@@ -1,0 +1,54 @@
+---
+import SectionHead from './SectionHead.astro';
+import { FLOW } from '../config/flow';
+import { SITE } from '../config/site';
+
+const stageCount = FLOW.lanes.reduce((n, l) => n + l.nodes.length, 0);
+---
+
+{
+  SITE.features.flow && (
+    <section class="section" style="padding-top: 0" id="flow">
+      <div class="container">
+        <SectionHead
+          eyebrow="Under the hood"
+          title="How the AI plumbing works"
+          lede="A schematic of a typical request — the same pattern behind the agents and retrieval systems in my work."
+        />
+        <div class="flow spot" data-reveal>
+          <div class="flow-head">
+            <span class="flow-title">{FLOW.title}</span>
+            <span class="flow-count tnum" aria-hidden="true">
+              {stageCount} stages · live
+            </span>
+          </div>
+          <div class="flow-lanes">
+            {FLOW.lanes.map((lane, li) => (
+              <div class="flow-lane">
+                <span class="flow-label">{lane.label}</span>
+                <div class="flow-rail">
+                  <span class="flow-fill" style={`--d:${li * 400}ms`} aria-hidden="true" />
+                  <span
+                    class="flow-packet"
+                    style={`--d:${li * 700}ms`}
+                    aria-hidden="true"
+                  />
+                  <div class="flow-track">
+                    {lane.nodes.map((n) => (
+                      <span class="flow-node">{n}</span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <p class="flow-note">{FLOW.note}</p>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+<script>
+  import '../scripts/spotlight';
+</script>

@@ -1,0 +1,92 @@
+---
+import '@fontsource-variable/recursive';
+import '@fontsource-variable/jetbrains-mono';
+import '../styles/tokens.css';
+import '../styles/base.css';
+import '../styles/components.css';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import CommandPalette from '../components/CommandPalette.astro';
+import { SITE } from '../config/site';
+
+interface Props {
+  /** Page title override; defaults to the pattern in SITE.seo. */
+  title?: string;
+  description?: string;
+}
+
+const { title, description = SITE.seo.description } = Astro.props;
+
+const pageTitle = title ?? SITE.seo.titleTemplate.replace('{name}', SITE.name).replace('{role}', SITE.role);
+const canonical = new URL(Astro.url.pathname, Astro.site ?? SITE.url);
+const ogImage = new URL(SITE.seo.ogImage, Astro.site ?? SITE.url);
+
+/* Person structured data — helps search engines attach the site to a human. */
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: SITE.name,
+  jobTitle: SITE.role,
+  email: `mailto:${SITE.email}`,
+  url: SITE.url,
+  image: new URL(SITE.avatar, Astro.site ?? SITE.url).toString(),
+  address: { '@type': 'PostalAddress', addressLocality: SITE.location },
+  sameAs: SITE.socials.map((s) => s.url),
+};
+---
+
+<!doctype html>
+<html lang="en" data-preset={SITE.theme.preset} data-mode={SITE.theme.mode}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <!-- Open Graph / Twitter: real preview cards on every share -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+    <!-- Restore the visitor's chosen color mode before first paint (no flash). -->
+    <script is:inline>
+      ;(function () {
+        try {
+          var m = localStorage.getItem('console-mode');
+          if (m === 'dark' || m === 'light') document.documentElement.dataset.mode = m;
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <Nav />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+    {SITE.features.commandPalette && <CommandPalette />}
+    <div class="toast-region" aria-live="polite" />
+
+    <!-- One shared bundle for page chrome; per-component islands load below. -->
+    <script>
+      import '../scripts/chrome';
+      import '../scripts/reveal';
+      import '../scripts/magnetic';
+      import '../scripts/spotlight';
+    </script>
+  </body>
+</html>

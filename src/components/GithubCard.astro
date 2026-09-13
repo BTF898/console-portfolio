@@ -1,0 +1,196 @@
+---
+import SectionHead from './SectionHead.astro';
+import { SITE } from '../config/site';
+
+/* Contribution heatmap, fetched from the public jogruber mirror of GitHub's
+   calendar at BUILD time — visitors never call the API and nothing breaks
+   client-side. Falls back to deterministic demo data when offline or when
+   no username is configured. Rendered as static HTML + CSS (no runtime). */
+
+interface Day {
+  date: string;
+  count: number;
+  level: number;
+}
+
+interface Week {
+  days: (Day | null)[];
+}
+
+interface Heat {
+  weeks: Week[];
+  total: number;
+  activeDays: number;
+  bestDay: number;
+  demo: boolean;
+}
+
+const LEVELS = 5;
+
+function demoHeat(): Heat {
+  /* mulberry32 — tiny seeded PRNG so the demo grid is stable across builds */
+  let seed = 42;
+  const rand = () => {
+    seed |= 0;
+    seed = (seed + 0x6d2b79f5) | 0;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+
+  const weeks: Week[] = [];
+  const today = new Date();
+  const start = new Date(today);
+  start.setDate(start.getDate() - 363);
+
+  let total = 0;
+  let activeDays = 0;
+  let bestDay = 0;
+
+  for (let w = 0; w < 53; w++) {
+    const days: (Day | null)[] = [];
+    for (let d = 0; d < 7; d++) {
+      const date = new Date(start);
+      date.setDate(start.getDate() + w * 7 + d);
+      if (date > today) {
+        days.push(null);
+        continue;
+      }
+      const r = rand();
+      const count = r < 0.32 ? 0 : Math.floor(r * 14);
+      total += count;
+      if (count > 0) activeDays++;
+      bestDay = Math.max(bestDay, count);
+      days.push({
+        date: date.toISOString().slice(0, 10),
+        count,
+        level: count === 0 ? 0 : Math.min(4, Math.ceil(count / 3.2)),
+      });
+    }
+    weeks.push({ days });
+  }
+  return { weeks, total, activeDays, bestDay, demo: true };
+}
+
+async function fetchHeat(username: string): Promise<Heat> {
+  try {
+    const res = await fetch(
+      `https://github-contributions-api.jogruber.de/v4/${username}?y=last`,
+      { signal: AbortSignal.timeout(6000) },
+    );
+    if (!res.ok) throw new Error(String(res.status));
+    const json = (await res.json()) as { contributions: Day[] };
+    const days = json.contributions;
+
+    const weeks: Week[] = [];
+    let week: Week = { days: new Array(days[0] ? new Date(days[0].date).getUTCDay() : 0).fill(null) };
+    for (const day of days) {
+      week.days.push(day);
+      if (week.days.length === 7) {
+        weeks.push(week);
+        week = { days: [] };
+      }
+    }
+    if (week.days.length > 0) weeks.push(week);
+
+    const counts = days.map((d) => d.count);
+    return {
+      weeks,
+      total: counts.reduce((a, b) => a + b, 0),
+      activeDays: counts.filter((c) => c > 0).length,
+      bestDay: Math.max(...counts, 0),
+      demo: false,
+    };
+  } catch {
+    return demoHeat();
+  }
+}
+
+const heat = SITE.features.github
+  ? SITE.githubUsername
+    ? await fetchHeat(SITE.githubUsername)
+    : { ...demoHeat(), demo: true }
+  : null;
+
+const todayIso = new Date().toISOString().slice(0, 10);
+---
+
+{
+  heat && (
+    <section class="section" id="open-source" style="padding-top: 0">
+      <div class="container">
+        <SectionHead
+          eyebrow="In public"
+          title="Commits & open source"
+          lede="The calendar is fetched at build time — what you see here is what my GitHub actually looked like when the site was last deployed."
+        />
+        <div class="gh-grid-2">
+          <div class="gh-card spot" data-reveal>
+            <div class="gh-head">
+              <a
+                class="gh-user"
+                href={`https://github.com/${SITE.githubUsername || ''}`}
+                target="_blank"
+                rel="noopener"
+              >
+                <span aria-hidden="true">▣</span> @{SITE.githubUsername || 'yourname'}
+              </a>
+              <span class="tag">last 12 months</span>
+            </div>
+            <div class="gh-stats">
+              <div class="stat">
+                <div class="stat-value tnum">{heat.total.toLocaleString('en-US')}</div>
+                <div class="stat-label">contributions</div>
+              </div>
+              <div class="stat">
+                <div class="stat-value tnum">{heat.activeDays}</div>
+                <div class="stat-label">active days</div>
+              </div>
+              <div class="stat">
+                <div class="stat-value tnum">{heat.bestDay}</div>
+                <div class="stat-label">busiest day</div>
+              </div>
+            </div>
+            <p class="gh-foot">
+              {heat.demo
+                ? 'Demo data — set your GitHub username in src/config/site.ts to go live.'
+                : 'Every cell is a real day. Green intensity = commits.'}
+            </p>
+          </div>
+
+          <div class="gh-heat" data-reveal data-reveal-delay="1">
+            <h3 class="gh-title">Contribution activity</h3>
+            <div class="gh-grid" role="img" aria-label="GitHub contribution calendar for the last year">
+              {heat.weeks.map((week, wi) =>
+                week.days.map((day, di) => {
+                  if (!day) return <span class="gh-cell" style="--d:0ms" aria-hidden="true" data-level="0" />;
+                  const delay = Math.min(wi * 2 + di, 120);
+                  const isToday = day.date === todayIso;
+                  return (
+                    <span
+                      class:list={['gh-cell', { 'is-today': isToday }]}
+                      data-level={Math.min(day.level, LEVELS - 1)}
+                      style={`--d:${delay * 18}ms`}
+                      title={`${day.date}: ${day.count} contributions`}
+                    />
+                  );
+                }),
+              )}
+            </div>
+            <div class="gh-legend">
+              <span>less</span>
+              {[0, 1, 2, 3, 4].map((l) => (
+                <span class="gh-swatch" style={`background: var(--gh-${l})`} />
+              ))}
+              <span>more</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+<script>
+  import '../scripts/spotlight';
+</script>

@@ -1,0 +1,33 @@
+---
+import { SITE } from '../config/site';
+---
+
+<section class="section" id="about">
+  <div class="container about-grid">
+    <div class="about-text" data-reveal>
+      <p class="section-eyebrow">About</p>
+      <h2 class="section-title">The short version</h2>
+      {SITE.about.map((p) => <p>{p}</p>)}
+    </div>
+
+    <aside class="id-card spot" data-reveal data-reveal-delay="1" aria-label="Quick facts">
+      <div class="id-card-head">
+        <img src={SITE.avatar} alt="" width="56" height="56" />
+        <div>
+          <div class="id-card-name">{SITE.name}</div>
+          <div class="id-card-role">{SITE.role}</div>
+        </div>
+      </div>
+      <dl class="about-facts">
+        {
+          SITE.facts.map((f) => (
+            <div>
+              <dt>{f.label}</dt>
+              <dd>{f.value}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </aside>
+  </div>
+</section>

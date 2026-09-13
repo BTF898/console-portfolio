@@ -1,0 +1,10 @@
+# Netlify deploy config — connect the repo in the Netlify dashboard and this
+# file supplies the rest. Vercel and Cloudflare Pages auto-detect Astro with
+# no config file at all (see docs/deployment.md).
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"

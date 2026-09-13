@@ -1,0 +1,185 @@
+/* ==========================================================================
+   tokens.css — the single source of truth for the template's look.
+   Buyers restyle the whole site by editing ONLY this file (or switching the
+   preset in src/config/site.ts). Component code never hard-codes colors.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Preset-independent tokens: geometry, motion, type.
+   -------------------------------------------------------------------------- */
+:root {
+  /* Layout */
+  --container: 1200px;
+  --container-wide: 1320px;
+  --gutter: clamp(1.25rem, 4vw, 2.5rem);
+  --section-y: clamp(5rem, 10vw, 8.5rem);
+  --nav-h: 68px;
+
+  /* Radii — deliberately small: crisp, instrument-like */
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 14px;
+  --r-pill: 10px;
+  --bw: 1px;
+
+  /* Motion — expo-out is the house easing */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --speed: 0.35s;
+
+  /* Type */
+  --font-sans: 'Recursive Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --display-weight: 740;
+  --display-track: -0.03em;
+  --title-weight: 700;
+  --title-track: -0.025em;
+
+  /* Background texture: dual-scale blueprint grid (coarse 96px + fine 24px) */
+  --bg-texture-size: 96px 96px, 96px 96px, 24px 24px, 24px 24px;
+  --bg-texture: linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px),
+    linear-gradient(var(--grid-fine) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-fine) 1px, transparent 1px);
+}
+
+/* --------------------------------------------------------------------------
+   2. Preset: FOREST (default) — deep green paper, periwinkle accent.
+      Dark values live on :root; light values override under [data-mode=light].
+   -------------------------------------------------------------------------- */
+:root,
+:root[data-preset='forest'] {
+  color-scheme: dark;
+
+  /* Surfaces */
+  --bg: #0c1310;
+  --bg-raised: #101a15;
+  --surface: #14211a;
+  --surface-2: #1a2b21;
+  --surface-3: #22352a;
+  --line: rgba(163, 220, 180, 0.14);
+  --line-strong: rgba(163, 220, 180, 0.3);
+  --grid: rgba(163, 220, 180, 0.05);
+  --grid-fine: rgba(163, 220, 180, 0.035);
+
+  /* Ink */
+  --text: #e8f2ec;
+  --text-2: #b0c8ba;
+  --text-3: #86a08e;
+
+  /* Accent */
+  --accent: #a3b9ff;
+  --accent-strong: #4667e8;
+  --accent-contrast: #ffffff;
+  --accent-soft: rgba(163, 185, 255, 0.12);
+  --accent-glow: rgba(120, 160, 255, 0.08);
+
+  /* Semantic */
+  --live: #6fd392;
+  --danger: #ff9585;
+
+  /* Elevation */
+  --float-shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.55), 0 2px 8px rgba(0, 0, 0, 0.3);
+  --btn-shadow: 0 10px 24px -14px rgba(70, 103, 232, 0.8);
+  --card-shadow: none;
+
+  color: var(--text);
+  background-color: var(--bg);
+}
+
+:root[data-preset='forest'][data-mode='light'] {
+  color-scheme: light;
+  --bg: #e7eee6;
+  --bg-raised: #edf3ea;
+  --surface: #f3f7f1;
+  --surface-2: #dde8d8;
+  --surface-3: #cfdcc8;
+  --line: rgba(35, 82, 50, 0.18);
+  --line-strong: rgba(35, 82, 50, 0.38);
+  --grid: rgba(53, 122, 76, 0.14);
+  --grid-fine: rgba(53, 122, 76, 0.09);
+
+  --text: #142019;
+  --text-2: #3c5244;
+  --text-3: #55685a;
+
+  --accent: #2c50c4;
+  --accent-strong: #2c50c4;
+  --accent-contrast: #ffffff;
+  --accent-soft: rgba(44, 80, 196, 0.09);
+  --accent-glow: rgba(44, 80, 196, 0.05);
+
+  --live: #1b7a3f;
+  --danger: #b3261e;
+
+  --float-shadow: 0 22px 50px -26px rgba(20, 32, 25, 0.3), 0 2px 6px rgba(20, 32, 25, 0.08);
+  --btn-shadow: 0 10px 22px -14px rgba(44, 80, 196, 0.7);
+}
+
+/* --------------------------------------------------------------------------
+   3. Preset: MIDNIGHT — blue-slate paper, cyan accent.
+   -------------------------------------------------------------------------- */
+:root[data-preset='midnight'] {
+  color-scheme: dark;
+  --bg: #0b1016;
+  --bg-raised: #0f1620;
+  --surface: #121b26;
+  --surface-2: #182432;
+  --surface-3: #203042;
+  --line: rgba(148, 184, 220, 0.14);
+  --line-strong: rgba(148, 184, 220, 0.3);
+  --grid: rgba(148, 184, 220, 0.05);
+  --grid-fine: rgba(148, 184, 220, 0.035);
+
+  --text: #e6edf5;
+  --text-2: #a9bdd2;
+  --text-3: #7e93aa;
+
+  --accent: #7fd4ff;
+  --accent-strong: #2296d6;
+  --accent-contrast: #04202e;
+  --accent-soft: rgba(127, 212, 255, 0.12);
+  --accent-glow: rgba(127, 212, 255, 0.08);
+
+  --live: #5fd39a;
+  --danger: #ff9585;
+
+  --float-shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.6), 0 2px 8px rgba(0, 0, 0, 0.32);
+  --btn-shadow: 0 10px 24px -14px rgba(34, 150, 214, 0.8);
+}
+
+:root[data-preset='midnight'][data-mode='light'] {
+  color-scheme: light;
+  --bg: #e9eef4;
+  --bg-raised: #eef3f8;
+  --surface: #f4f7fa;
+  --surface-2: #dfe8f0;
+  --surface-3: #d2dde8;
+  --line: rgba(23, 55, 82, 0.18);
+  --line-strong: rgba(23, 55, 82, 0.38);
+  --grid: rgba(23, 55, 82, 0.1);
+  --grid-fine: rgba(23, 55, 82, 0.06);
+
+  --text: #101820;
+  --text-2: #3b4c5e;
+  --text-3: #566878;
+
+  --accent: #0f6f9e;
+  --accent-strong: #0d6390;
+  --accent-contrast: #ffffff;
+  --accent-soft: rgba(15, 111, 158, 0.09);
+  --accent-glow: rgba(15, 111, 158, 0.05);
+
+  --live: #1b7a3f;
+  --danger: #b3261e;
+
+  --float-shadow: 0 22px 50px -26px rgba(16, 24, 32, 0.28), 0 2px 6px rgba(16, 24, 32, 0.08);
+  --btn-shadow: 0 10px 22px -14px rgba(13, 99, 144, 0.7);
+}
+
+/* Wide screens get a wider container. */
+@media (min-width: 1440px) {
+  :root {
+    --container: var(--container-wide);
+  }
+}

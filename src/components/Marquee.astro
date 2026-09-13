@@ -1,0 +1,20 @@
+---
+import { SITE } from '../config/site';
+
+/* The track is duplicated once so the -50% translate loops seamlessly. */
+const row = SITE.skills;
+const doubled = [...row, ...row];
+---
+
+<div class="marquees" style="margin-top: clamp(1rem, 3vw, 2rem)">
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track">
+      {doubled.map((s) => <span class="chip">{s}</span>)}
+    </div>
+  </div>
+  <div class="marquee marquee--reverse" aria-hidden="true">
+    <div class="marquee-track">
+      {doubled.map((s) => <span class="chip mono">▸ {s}</span>)}
+    </div>
+  </div>
+</div>

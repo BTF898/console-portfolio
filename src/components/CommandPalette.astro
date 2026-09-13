@@ -1,0 +1,73 @@
+---
+import { SITE } from '../config/site';
+
+/* Palette items are plain DOM so they are server-rendered, keyboard- and
+   screen-reader-friendly. scripts/palette.ts wires the behavior. */
+
+const sections = [
+  { label: 'Go to Work', hint: '#work' },
+  { label: 'Go to Lab', hint: '#lab' },
+  { label: 'Go to Experience', hint: '#experience' },
+  { label: 'Go to About', hint: '#about' },
+  { label: 'Go to Contact', hint: '#contact' },
+];
+---
+
+<div class="cmdk-overlay" hidden>
+  <div class="cmdk" role="dialog" aria-modal="true" aria-label="Command palette">
+    <div class="cmdk-input-wrap">
+      <span class="dim" aria-hidden="true">›_</span>
+      <input class="cmdk-input" type="text" placeholder="Type a command or search…" autocomplete="off"
+        spellcheck="false" aria-label="Search commands" />
+    </div>
+
+    <ul class="cmdk-list">
+      {
+        sections.map((s) => (
+          <li class="cmdk-item" data-action={`scroll:${s.hint}`} data-label={s.label}>
+            <span class="cmdk-icon" aria-hidden="true">→</span>
+            <span>{s.label}</span>
+          </li>
+        ))
+      }
+      {
+        SITE.socials.map((s) => (
+          <li class="cmdk-item" data-action={`link:${s.url}`} data-label={`Open ${s.label}`}>
+            <span class="cmdk-icon" aria-hidden="true">↗</span>
+            <span>Open {s.label}</span>
+            <span class="dim mono" style="margin-left:auto;font-size:.72rem">{s.handle}</span>
+          </li>
+        ))
+      }
+      {
+        SITE.resumeUrl && (
+          <li class="cmdk-item" data-action={`link:${new URL(SITE.resumeUrl, SITE.url)}`} data-label="Download résumé">
+            <span class="cmdk-icon" aria-hidden="true">↓</span>
+            <span>Download résumé</span>
+          </li>
+        )
+      }
+      <li class="cmdk-item" data-action={`copy:${SITE.email}`} data-label="Copy email address">
+        <span class="cmdk-icon" aria-hidden="true">⧉</span>
+        <span>Copy email address</span>
+        <span class="dim mono" style="margin-left:auto;font-size:.72rem">{SITE.email}</span>
+      </li>
+      <li class="cmdk-item" data-action="theme" data-label="Toggle dark / light mode">
+        <span class="cmdk-icon" aria-hidden="true">◐</span>
+        <span>Toggle dark / light mode</span>
+      </li>
+    </ul>
+
+    <div class="cmdk-empty" hidden>No matching command.</div>
+
+    <div class="cmdk-hint">
+      <span><kbd class="kbd">↑</kbd> <kbd class="kbd">↓</kbd> navigate</span>
+      <span><kbd class="kbd">↵</kbd> select</span>
+      <span><kbd class="kbd">esc</kbd> close</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  import '../scripts/palette';
+</script>

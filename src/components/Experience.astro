@@ -1,0 +1,103 @@
+---
+import SectionHead from './SectionHead.astro';
+import { getCollection, render } from 'astro:content';
+
+const entries = (await getCollection('experience')).sort((a, b) => a.data.order - b.data.order);
+
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+function fmt(ym: string): string {
+  const [y, m] = ym.split('-').map(Number);
+  return `${MONTHS[m - 1] ?? '?'} ${y}`;
+}
+
+function duration(start: string, end: string | null): string {
+  const [sy, sm] = start.split('-').map(Number);
+  const endDate = end ? end.split('-').map(Number) : [new Date().getFullYear(), new Date().getMonth() + 1];
+  const months = (endDate[0] - sy) * 12 + (endDate[1] - sm);
+  const years = Math.floor(months / 12);
+  const rest = months % 12;
+  return years > 0 ? `${years} yr ${rest} mo` : `${months} mo`;
+}
+
+const jobs = await Promise.all(
+  entries.map(async (e) => ({
+    ...e.data,
+    when: `${fmt(e.data.start)} — ${e.data.end ? fmt(e.data.end) : 'Present'}`,
+    dur: duration(e.data.start, e.data.end),
+    body: (await render(e)).Content,
+  })),
+);
+---
+
+<section class="section" id="experience">
+  <div class="container">
+    <SectionHead
+      eyebrow="Experience"
+      title="Where I've worked"
+      lede="Roles, teams and the numbers I left behind."
+    />
+
+    <div class="xp-wrap">
+      <div class="xp-rail" aria-hidden="true"><span class="xp-rail-fill"></span></div>
+
+      {
+        jobs.map((job) => (
+          <article class="xp-item" data-reveal>
+            <span class="xp-node" aria-hidden="true" />
+            <div class="xp-card spot">
+              <div class="xp-head">
+                <h3 class="xp-title">
+                  {job.role} · <span class="xp-company">{job.company}</span>
+                </h3>
+                <span class="xp-when tnum">
+                  {job.when} · {job.dur}
+                </span>
+              </div>
+              <div class="xp-body">
+                <job.body />
+              </div>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .xp-body :global(ul) {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 0.5rem;
+  }
+  .xp-body :global(li) {
+    position: relative;
+    padding-left: 1.35rem;
+    color: var(--text-2);
+    font-size: 0.93rem;
+  }
+  .xp-body :global(li::before) {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--text-3);
+  }
+  .xp-body :global(strong) {
+    color: var(--text);
+    font-weight: 650;
+    font-variant-numeric: tabular-nums;
+  }
+  .xp-body :global(p) {
+    color: var(--text-2);
+    font-size: 0.93rem;
+    margin-bottom: 0.7rem;
+  }
+</style>
+
+<script>
+  import '../scripts/timeline';
+  import '../scripts/spotlight';
+</script>

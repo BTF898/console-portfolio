@@ -1,0 +1,17 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../config/site';
+---
+
+<Base title={`Page not found · ${SITE.name}`}>
+  <section class="section" style="min-height: 60svh; display: grid; align-items: center">
+    <div class="container" style="text-align: center">
+      <p class="section-eyebrow" style="justify-content:center">Error 404</p>
+      <h1 class="section-title">This route doesn't exist.</h1>
+      <p class="section-lede" style="margin: 0 auto 1.8rem">
+        The console came back empty. Try the homepage — everything is there.
+      </p>
+      <a class="btn btn--primary magnetic" href="/">Back to the site</a>
+    </div>
+  </section>
+</Base>

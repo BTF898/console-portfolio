@@ -1,0 +1,49 @@
+name: Deploy to GitHub Pages
+
+# One of the four zero-config hosts. This workflow is manual on purpose so it
+# never spams failure emails for buyers deploying on Netlify/Vercel/Cloudflare:
+#
+#   1. Repo → Settings → Pages → Source: "GitHub Actions"
+#   2. Uncomment the `push:` trigger below (or run it from the Actions tab)
+#   3. Serving from a subpath? Set `site` and `base` in astro.config.mjs first
+#
+# Not using GitHub Pages? Delete this file — nothing else references it.
+
+on:
+  workflow_dispatch:
+  # push:
+  #   branches: [main]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

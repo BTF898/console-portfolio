@@ -1,0 +1,36 @@
+---
+title: Relay
+tagline: Realtime event infrastructure
+summary: >
+  A push-first event relay that moves state changes from services to every
+  connected client in under 100 ms. Built for product teams tired of polling:
+  the broker fans out over WebSockets with at-least-once delivery, while a
+  replicated log keeps every subscriber's position recoverable across
+  restarts and region failovers.
+year: 2025
+featured: true
+order: 1
+stack: [Go, NATS, Raft, Redis, React]
+metrics:
+  - { value: 99.98%, label: 'uptime (12 mo)' }
+  - { value: '87 ms', label: 'p95 delivery' }
+  - { value: '120k', label: 'concurrent clients' }
+points:
+  - Single-binary broker that survives node loss via a Raft-replicated log
+  - Backpressure-aware fan-out — slow clients never stall a topic
+  - Typed SDKs for TS and Go generated from one protobuf source of truth
+links:
+  repo: https://github.com/yourname/relay
+diagram:
+  caption: 'relay — fan-out topology'
+  hot: broker
+  nodes:
+    - { id: web, label: web / mobile, sub: sse + ws clients, col: 0, row: 0 }
+    - { id: edge, label: edge gateway, sub: auth · limits, col: 1, row: 0 }
+    - { id: broker, label: relay broker, sub: fan-out core, col: 2, row: 0 }
+    - { id: store, label: raft store, sub: replicated log, col: 3, row: 1 }
+    - { id: sink, label: sinks, sub: webhooks · s3, col: 4, row: 0 }
+  edges: [[web, edge], [edge, broker], [broker, sink], [broker, store]]
+---
+
+Demo project for the template — replace this file with your own work.

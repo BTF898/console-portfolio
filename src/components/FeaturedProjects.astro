@@ -1,0 +1,81 @@
+---
+import SectionHead from './SectionHead.astro';
+import ProjectDiagram from './ProjectDiagram.astro';
+import { getCollection } from 'astro:content';
+
+/* Featured projects: sorted by `order`, big alternating rows with an
+   animated architecture diagram rendered from frontmatter (see
+   ProjectDiagram.astro). Non-featured projects go to MoreProjects. */
+
+const projects = (await getCollection('projects'))
+  .filter((p) => p.data.featured)
+  .sort((a, b) => a.data.order - b.data.order);
+---
+
+<section class="section" id="work">
+  <div class="container">
+    <SectionHead
+      eyebrow="Work"
+      title="Selected projects"
+      lede="Systems I have designed, shipped and kept alive — with the numbers that mattered."
+    />
+
+    <div class="feats">
+      {
+        projects.map((project, i) => {
+          const d = project.data;
+          return (
+            <article class:list={['feat', { 'feat--flip': i % 2 === 1 }]}>
+              <div class="feat-visual" data-reveal={i % 2 === 1 ? 'right' : 'left'}>
+                {d.diagram && <ProjectDiagram diagram={d.diagram} title={d.title} />}
+              </div>
+              <div class="feat-body" data-reveal data-reveal-delay="1">
+                <p class="feat-tagline">{d.tagline} · {d.year}</p>
+                <h3 class="feat-title">{d.title}</h3>
+                <p class="feat-summary">{d.summary}</p>
+                {d.points.length > 0 && (
+                  <ul class="feat-points">
+                    {d.points.map((p) => (
+                      <li>{p}</li>
+                    ))}
+                  </ul>
+                )}
+                {d.metrics.length > 0 && (
+                  <div class="feat-metrics">
+                    {d.metrics.map((m) => (
+                      <div class="metric">
+                        <div class="metric-value">{m.value}</div>
+                        <div class="metric-label">{m.label}</div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                <div class="feat-stack">
+                  {d.stack.map((s) => (
+                    <span class="chip">{s}</span>
+                  ))}
+                </div>
+                <div class="feat-links">
+                  {d.links.live && (
+                    <a class="btn btn--primary btn--sm magnetic" href={d.links.live} target="_blank" rel="noopener">
+                      Visit project ↗
+                    </a>
+                  )}
+                  {d.links.repo && (
+                    <a class="btn btn--ghost btn--sm magnetic" href={d.links.repo} target="_blank" rel="noopener">
+                      Source code
+                    </a>
+                  )}
+                </div>
+              </div>
+            </article>
+          );
+        })
+      }
+    </div>
+  </div>
+</section>
+
+<script>
+  import '../scripts/spotlight';
+</script>

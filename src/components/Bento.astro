@@ -1,0 +1,29 @@
+---
+import { SITE } from '../config/site';
+
+/* Inline icon set — swap or extend freely (keep viewBox 0 0 24 24). */
+const icons: Record<string, string> = {
+  spark:
+    'M12 2v4M12 18v4M4.9 4.9l2.9 2.9M16.2 16.2l2.9 2.9M2 12h4M18 12h4M4.9 19.1l2.9-2.9M16.2 7.8l2.9-2.9',
+  cloud: 'M7 18a4.5 4.5 0 1 1 .7-8.95A6 6 0 0 1 19 10.5 3.75 3.75 0 0 1 18.25 18Z',
+  shield: 'M12 3 5 6v5c0 4.5 3 8.1 7 9.5 4-1.4 7-5 7-9.5V6Z',
+};
+---
+
+<section class="section" style="padding-top:0" aria-label="What I do">
+  <div class="container bento">
+    {
+      SITE.panels.map((p, i) => (
+        <article class="panel spot" data-reveal data-reveal-delay={i}>
+          <span class="panel-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <path d={icons[p.icon] ?? icons.spark} stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </span>
+          <h3 class="panel-title">{p.title}</h3>
+          <p class="panel-blurb">{p.blurb}</p>
+        </article>
+      ))
+    }
+  </div>
+</section>

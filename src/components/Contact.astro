@@ -1,0 +1,83 @@
+---
+import SectionHead from './SectionHead.astro';
+import { SITE } from '../config/site';
+
+const showForm = SITE.contact.formEndpoint !== '';
+---
+
+<section class="section" id="contact">
+  <div class="container">
+    <SectionHead eyebrow="Contact" title="Let's build something" />
+    <div class="contact-grid">
+      <div data-reveal>
+        <p class="muted">
+          The fastest way to reach me is email — I read everything and reply
+          within a day or two.
+        </p>
+        <a class="contact-email" href={`mailto:${SITE.email}`}>{SITE.email}</a>
+        <div class="contact-ctas">
+          <button class="btn btn--ghost magnetic" type="button" data-copy={SITE.email}>
+            Copy address
+          </button>
+          {
+            SITE.socials.map((s) => (
+              <a class="btn btn--ghost magnetic" href={s.url} target="_blank" rel="noopener">
+                {s.label} ↗
+              </a>
+            ))
+          }
+        </div>
+      </div>
+
+      {
+        showForm ? (
+          <form class="compose spot" data-reveal data-reveal-delay="1" action={SITE.contact.formEndpoint} method="POST">
+            <div class="field">
+              <label for="cf-name">Name</label>
+              <input id="cf-name" name="name" type="text" required autocomplete="name" />
+            </div>
+            <div class="field">
+              <label for="cf-email">Email</label>
+              <input id="cf-email" name="email" type="email" required autocomplete="email" />
+            </div>
+            <div class="field">
+              <label for="cf-message">Message</label>
+              <textarea id="cf-message" name="message" required />
+            </div>
+            <p class="field-error" role="alert" />
+            <button class="btn btn--primary compose-submit magnetic" type="submit">Send message</button>
+          </form>
+        ) : (
+          <aside class="id-card spot" data-reveal data-reveal-delay="1">
+            <h3 class="panel-title">Prefer a form?</h3>
+            <p class="panel-blurb">
+              This template ships with the form disabled. Paste an endpoint from
+              Formspree, Web3Forms or Basin into
+              <code class="mono accent">site.contact.formEndpoint</code> in
+              <span class="mono">src/config/site.ts</span> and the form appears —
+              no backend required.
+            </p>
+          </aside>
+        )
+      }
+    </div>
+  </div>
+</section>
+
+<script>
+  /* Copy-to-clipboard buttons + toast (form handling lives in contact.ts). */
+  document.querySelectorAll<HTMLElement>('[data-copy]').forEach((btn) =>
+    btn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(btn.dataset.copy ?? '');
+        document.dispatchEvent(new CustomEvent('console:toast', { detail: 'Email copied' }));
+        document.dispatchEvent(new CustomEvent('console:achieve', { detail: 'copy' }));
+      } catch {
+        document.dispatchEvent(new CustomEvent('console:toast', { detail: 'Copy failed — select it manually' }));
+      }
+    }),
+  );
+
+  import '../scripts/contact';
+  import '../scripts/spotlight';
+</script>

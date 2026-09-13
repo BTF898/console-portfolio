@@ -1,0 +1,76 @@
+---
+import Terminal from './Terminal.astro';
+import { SITE } from '../config/site';
+
+const nameWords = SITE.name.split(' ');
+---
+
+<section class="hero" id="top">
+  <div class="container hero-grid">
+    <div>
+      <div class="hero-hello" data-reveal>
+        <span class="hero-avatar"><img src={SITE.avatar} alt={`Portrait of ${SITE.name}`} width="88" height="88" /></span>
+        <span class="hero-hello-text">
+          <span class="hero-kicker"><b>hello</b> — you found the console</span>
+          <span class="status"><span class="status-dot" aria-hidden="true"></span>{SITE.availability}</span>
+        </span>
+      </div>
+
+      <h1 class="hero-name" data-reveal>
+        {
+          nameWords.map((word, i) => (
+            <>
+              <span class="word-mask" style={`--reveal-delay:${i + 1}`}>
+                <span>{word}</span>
+              </span>
+              {i < nameWords.length - 1 && ' '}
+            </>
+          ))
+        }
+      </h1>
+
+      <p class="hero-role" data-reveal data-reveal-delay="2">
+        <span>I'm {SITE.name.split(' ')[0]} —</span>
+        <span class="rotator" aria-hidden="true">
+          <span class="rotator-window">
+            {SITE.roles.map((r) => <span class="rotator-word">{r}</span>)}
+          </span>
+        </span>
+        <span class="sr-only">{SITE.roles[0]}</span>
+      </p>
+
+      <p class="hero-summary" data-reveal data-reveal-delay="3">{SITE.tagline}</p>
+
+      <div class="hero-meta" data-reveal data-reveal-delay="4">
+        <span class="mono dim">📍 {SITE.location}</span>
+        <span class="mono dim">⏱ {new Date().getFullYear() - 2018} yrs building</span>
+      </div>
+
+      <div class="hero-ctas" data-reveal data-reveal-delay="5">
+        <a class="btn btn--primary magnetic" href="#work">See my work</a>
+        <a class="btn btn--ghost magnetic" href={`mailto:${SITE.email}`}>{SITE.email}</a>
+        {SITE.resumeUrl && <a class="btn btn--ghost magnetic" href={SITE.resumeUrl}>Résumé ↓</a>}
+      </div>
+
+      <div class="hero-socials" data-reveal data-reveal-delay="6">
+        {
+          SITE.socials.map((s) => (
+            <a href={s.url} target="_blank" rel="noopener">
+              {s.label} <span aria-hidden="true">↗</span>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+
+    {SITE.features.terminal && <Terminal />}
+  </div>
+
+  <a class="hero-scroll" href="#work" aria-label="Scroll to work">
+    <span class="hero-scroll-line" aria-hidden="true"></span>
+  </a>
+</section>
+
+<script>
+  import '../scripts/rotator';
+</script>

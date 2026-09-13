@@ -1,0 +1,34 @@
+---
+import { TERMINAL } from '../config/terminal';
+
+/* Server-render the first step as real content (screen readers, no-JS, SEO),
+   then hand the full script to scripts/terminal.ts as inline JSON. The
+   animated layer is aria-hidden because it loops forever. */
+
+const first = TERMINAL.steps[0];
+const staticPrompt = `${TERMINAL.user}@${TERMINAL.host}`;
+---
+
+<div class="console spot" data-reveal data-reveal-delay="2">
+  <div class="console-bar">
+    <span class="console-dots" aria-hidden="true"><span></span><span></span><span></span></span>
+    <span class="console-title">{staticPrompt}: {TERMINAL.path} — portfolio</span>
+  </div>
+  <div class="term" data-terminal={JSON.stringify(TERMINAL)}>
+    <div class="t-screen">
+      <div class="t-static">
+        <div class="t-line">
+          <span class="t-prompt">{staticPrompt}</span><span class="t-dim">:</span><span class="t-path"
+            >{TERMINAL.path}</span
+          ><span class="t-dim">$ </span><span class="t-cmd">{first.cmd}</span>
+        </div>
+        {first.out.map((line) => <div class="t-line t-out">{line}</div>)}
+      </div>
+      <div class="t-live" aria-hidden="true"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  import '../scripts/terminal';
+</script>

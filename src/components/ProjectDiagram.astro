@@ -1,0 +1,108 @@
+---
+/* ProjectDiagram — an animated architecture SVG generated from frontmatter.
+   Nodes sit on a grid (col × row), edges connect node ids. The container is
+   a [data-reveal] element, so nodes pop in staggered when scrolled into
+   view and edges carry an endless dash-flow. Pure SVG + CSS: no runtime. */
+
+interface DiagramNode {
+  id: string;
+  label: string;
+  sub?: string;
+  col: number;
+  row: number;
+  hot?: boolean;
+}
+
+interface Diagram {
+  caption?: string;
+  hot?: string;
+  nodes: DiagramNode[];
+  edges: [string, string][];
+}
+
+interface Props {
+  diagram: Diagram;
+  title: string;
+}
+
+const { diagram, title } = Astro.props;
+
+/* --- geometry --- */
+const BOX_W = 132;
+const BOX_H = 44;
+const GAP_X = 34;
+const GAP_Y = 30;
+const PAD = 14;
+
+const cols = Math.max(...diagram.nodes.map((n) => n.col)) + 1;
+const rows = Math.max(...diagram.nodes.map((n) => n.row)) + 1;
+
+const width = cols * BOX_W + (cols - 1) * GAP_X + PAD * 2;
+const height = rows * BOX_H + (rows - 1) * GAP_Y + PAD * 2;
+
+const pos = (n: DiagramNode) => ({
+  x: PAD + n.col * (BOX_W + GAP_X),
+  y: PAD + n.row * (BOX_H + GAP_Y),
+});
+
+const byId = new Map(diagram.nodes.map((n) => [n.id, n]));
+
+/* --- orthogonal-ish edge paths (right side of A → left side of B) --- */
+const edgePaths = diagram.edges
+  .map(([from, to]) => {
+    const a = byId.get(from);
+    const b = byId.get(to);
+    if (!a || !b) return null;
+    const pa = pos(a);
+    const pb = pos(b);
+    const x1 = pa.x + BOX_W;
+    const y1 = pa.y + BOX_H / 2;
+    const x2 = pb.x;
+    const y2 = pb.y + BOX_H / 2;
+    const mx = (x1 + x2) / 2;
+    const d = `M ${x1} ${y1} C ${mx} ${y1}, ${mx} ${y2}, ${x2} ${y2}`;
+    return { d, hot: diagram.hot === from || diagram.hot === to };
+  })
+  .filter((e): e is { d: string; hot: boolean } => e !== null);
+---
+
+<div class="diagram">
+  <div class="diagram-bar">
+    <span class="diagram-caption">{diagram.caption || `${title} — architecture`}</span>
+    <span class="diagram-hint" aria-hidden="true">live · css</span>
+  </div>
+  <svg
+    class="diagram-svg"
+    viewBox={`0 0 ${width} ${height}`}
+    role="img"
+    aria-label={`Architecture diagram of ${title}`}
+  >
+    {
+      edgePaths.map((e) => (
+        <path class:list={['d-edge', { 'd-edge--hot': e.hot }]} d={e.d} />
+      ))
+    }
+    {
+      diagram.nodes.map((n, i) => {
+        const p = pos(n);
+        const cx = p.x + BOX_W / 2;
+        return (
+          <g
+            class:list={['d-node', { 'd-hot': diagram.hot === n.id }]}
+            style={`--d:${i * 90}ms`}
+          >
+            <rect class="d-node-box" x={p.x} y={p.y} width={BOX_W} height={BOX_H} rx="8" />
+            <text class="d-node-label" x={cx} y={p.y + (n.sub ? 19 : 26)} text-anchor="middle">
+              {n.label}
+            </text>
+            {n.sub && (
+              <text class="d-node-sub" x={cx} y={p.y + 32} text-anchor="middle">
+                {n.sub}
+              </text>
+            )}
+          </g>
+        );
+      })
+    }
+  </svg>
+</div>

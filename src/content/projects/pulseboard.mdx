@@ -1,0 +1,36 @@
+---
+title: Pulseboard
+tagline: Metrics pipeline
+summary: >
+  A self-hosted metrics platform that ingests a rolling 40,000 requests per
+  second from fleet agents, rolls them into one-minute aggregates, and serves
+  dashboards that stay fast even when you zoom out to 90 days. Built because
+  the SaaS alternative cost more per month than the servers it monitored.
+year: 2024
+featured: true
+order: 2
+stack: [TypeScript, ClickHouse, Kafka, Docker]
+metrics:
+  - { value: '40k/s', label: 'sustained ingest' }
+  - { value: '180 ms', label: 'dashboard p95' }
+  - { value: '1.2 TB', label: 'compacted / day' }
+points:
+  - Columnar storage with tiered retention — hot data in memory, cold on disk
+  - Query planner caches rollups so zooming out is as fast as zooming in
+  - Zero-downtime schema migrations verified by shadow traffic
+links:
+  repo: https://github.com/yourname/pulseboard
+diagram:
+  caption: 'pulseboard — ingest to dashboard'
+  hot: queue
+  nodes:
+    - { id: agents, label: fleet agents, sub: host metrics, col: 0, row: 1 }
+    - { id: collector, label: collector, sub: batch ingest, col: 1, row: 1 }
+    - { id: queue, label: queue, sub: backpressure, col: 2, row: 1 }
+    - { id: rollup, label: rollup, sub: 1m windows, col: 3, row: 0 }
+    - { id: tsdb, label: tsdb, sub: column store, col: 4, row: 1 }
+    - { id: api, label: query api, sub: dashboards, col: 4, row: 0 }
+  edges: [[agents, collector], [collector, queue], [queue, rollup], [rollup, tsdb], [rollup, api]]
+---
+
+Demo project for the template — replace this file with your own work.

@@ -1,0 +1,23 @@
+{
+  "name": "console-portfolio-template",
+  "version": "1.1.0",
+  "description": "Console — a sellable portfolio template for engineers. Astro + content collections + vanilla TS islands. Anyone can edit content without touching code.",
+  "type": "module",
+  "private": true,
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "og": "node scripts/generate-og.mjs"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^4.0.0",
+    "@astrojs/sitemap": "^3.0.0",
+    "@fontsource-variable/jetbrains-mono": "^5.2.0",
+    "@fontsource-variable/recursive": "^5.2.0",
+    "astro": "^5.0.0"
+  }
+}

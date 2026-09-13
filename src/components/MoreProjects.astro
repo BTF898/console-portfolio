@@ -1,0 +1,59 @@
+---
+import SectionHead from './SectionHead.astro';
+import { getCollection } from 'astro:content';
+
+const projects = (await getCollection('projects'))
+  .filter((p) => !p.data.featured)
+  .sort((a, b) => a.data.order - b.data.order);
+---
+
+{
+  projects.length > 0 && (
+    <section class="section" id="more" style="padding-top: 0">
+      <div class="container">
+        <SectionHead
+          eyebrow="More"
+          title="Other things I've built"
+          lede="Smaller ships, tools and collaborations worth a mention."
+        />
+        <div class="more-grid">
+          {projects.map((p, i) => (
+            <article class="card spot" data-reveal data-reveal-delay={i % 3}>
+              <div class="card-top">
+                <h3 class="card-title">{p.data.title}</h3>
+                <span class="tag tnum">{p.data.year}</span>
+              </div>
+              <p class="card-summary">{p.data.summary}</p>
+              {p.data.metrics.length > 0 && (
+                <span class="mono dim" style="font-size:.8rem">
+                  {p.data.metrics.map((m) => `${m.value} ${m.label}`).join(' · ')}
+                </span>
+              )}
+              <div class="card-stack">
+                {p.data.stack.map((s) => (
+                  <span class="chip">{s}</span>
+                ))}
+              </div>
+              <div class="card-links">
+                {p.data.links.repo && (
+                  <a href={p.data.links.repo} target="_blank" rel="noopener">
+                    source ↗
+                  </a>
+                )}
+                {p.data.links.live && (
+                  <a href={p.data.links.live} target="_blank" rel="noopener">
+                    live ↗
+                  </a>
+                )}
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+<script>
+  import '../scripts/spotlight';
+</script>

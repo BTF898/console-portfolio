@@ -1,0 +1,97 @@
+# Decap CMS configuration — mirrors the Astro content collections.
+# Edit collections here when you add new content types.
+# Backend/auth setup is documented in docs/deployment.md.
+
+backend:
+  # For Netlify Identity:
+  name: git-gateway
+  # For a plain GitHub repo via an OAuth gateway instead, use:
+  # name: github
+  # repo: yourname/your-repo
+  branch: main
+
+# Set this once your site is deployed:
+# site_url: https://your-domain.com
+# logo_url: https://your-domain.com/favicon.svg
+
+media_folder: public/uploads
+public_folder: /uploads
+
+publish_mode: editorial_workflow
+
+collections:
+  - name: projects
+    label: Projects
+    folder: src/content/projects
+    extension: mdx
+    format: frontmatter
+    create: true
+    sortable_fields: [order, year, title]
+    editor:
+      preview: false
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Tagline, name: tagline, widget: string }
+      - { label: Summary, name: summary, widget: text }
+      - { label: Year, name: year, widget: number, value_type: int }
+      - { label: Featured (big section), name: featured, widget: boolean, default: false }
+      - { label: Order, name: order, widget: number, value_type: int, default: 10 }
+      - label: Stack
+        name: stack
+        widget: list
+        required: false
+      - label: Metrics
+        name: metrics
+        widget: list
+        required: false
+        fields:
+          - { label: Value, name: value, widget: string }
+          - { label: Label, name: label, widget: string }
+      - label: Points
+        name: points
+        widget: list
+        required: false
+      - label: Links
+        name: links
+        widget: object
+        required: false
+        fields:
+          - { label: Live URL, name: live, widget: string, required: false }
+          - { label: Repo URL, name: repo, widget: string, required: false }
+
+  - name: experience
+    label: Experience
+    folder: src/content/experience
+    extension: md
+    format: frontmatter
+    create: true
+    sortable_fields: [order, company]
+    editor:
+      preview: false
+    fields:
+      - { label: Company, name: company, widget: string }
+      - { label: Role, name: role, widget: string }
+      - { label: Start (YYYY-MM), name: start, widget: string }
+      - { label: End (YYYY-MM or empty for present), name: end, widget: string, required: false }
+      - { label: Order, name: order, widget: number, value_type: int, default: 10 }
+      - { label: Details (paragraph + bullet list), name: body, widget: markdown }
+
+  - name: lab
+    label: Lab
+    folder: src/content/lab
+    extension: md
+    format: frontmatter
+    create: true
+    sortable_fields: [order, name]
+    editor:
+      preview: false
+    fields:
+      - { label: Name, name: name, widget: string }
+      - { label: Note, name: note, widget: string }
+      - label: Glyph
+        name: glyph
+        widget: select
+        options: [spin, pulse, scan, draw, blink]
+        default: pulse
+      - { label: Link, name: link, widget: string, required: false }
+      - { label: Order, name: order, widget: number, value_type: int, default: 10 }
