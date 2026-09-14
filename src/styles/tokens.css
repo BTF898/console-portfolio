@@ -177,6 +177,89 @@
   --btn-shadow: 0 10px 22px -14px rgba(13, 99, 144, 0.7);
 }
 
+/* --------------------------------------------------------------------------
+   4. Preset: REFERENCE — the palette documented in DESIGN-ANALYSIS.md,
+      reconstructed from the measured values of the reference site
+      (amantiwari.co.in). Values are facts extracted by measurement; all CSS
+      here is original. Selecting this preset approximates the analyzed
+      site's look: sharper 4/6/8px geometry, 100px/20px grid, heavier hero.
+   -------------------------------------------------------------------------- */
+:root[data-preset='reference'] {
+  color-scheme: dark;
+
+  /* Geometry — the analyzed site runs sharper corners and a finer grid. */
+  --r-sm: 4px;
+  --r-md: 6px;
+  --r-lg: 8px;
+  --r-pill: 6px;
+  --bg-texture-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
+  --display-weight: 760;
+  --display-track: -0.035em;
+  --title-weight: 720;
+  --title-track: -0.03em;
+
+  /* Surfaces */
+  --bg: #0f1a14;
+  --bg-raised: #122019;
+  --surface: #16261d;
+  --surface-2: #1c2f24;
+  --surface-3: #24392c;
+  --line: rgba(170, 220, 180, 0.11);
+  --line-strong: rgba(170, 220, 180, 0.22);
+  --grid: rgba(170, 220, 180, 0.07);
+  --grid-fine: rgba(170, 220, 180, 0.045);
+
+  /* Ink */
+  --text: #e4f0e6;
+  --text-2: #adc6b3;
+  --text-3: #89a491;
+
+  /* Accent */
+  --accent: #9ab9ff;
+  --accent-strong: #3f6be0;
+  --accent-contrast: #ffffff;
+  --accent-soft: rgba(154, 185, 255, 0.12);
+  --accent-glow: rgba(120, 160, 255, 0.07);
+
+  /* Semantic */
+  --live: #7fd99a;
+  --danger: #ff9a8f;
+
+  /* Elevation */
+  --float-shadow: 0 24px 60px -20px rgba(0, 0, 0, 0.6), 0 2px 8px rgba(0, 0, 0, 0.3);
+  --btn-shadow: 0 10px 24px -14px rgba(63, 107, 224, 0.8);
+  --card-shadow: none;
+}
+
+:root[data-preset='reference'][data-mode='light'] {
+  color-scheme: light;
+  --bg: #e5eedf;
+  --bg-raised: #ecf2e7;
+  --surface: #f4f8f1;
+  --surface-2: #dce6d5;
+  --surface-3: #d0dfc8;
+  --line: rgba(21, 35, 26, 0.16);
+  --line-strong: rgba(21, 35, 26, 0.34);
+  --grid: rgba(60, 140, 90, 0.1);
+  --grid-fine: rgba(60, 140, 90, 0.065);
+
+  --text: #15231a;
+  --text-2: #3c5244;
+  --text-3: #55685a;
+
+  --accent: #1f47b0;
+  --accent-strong: #1f47b0;
+  --accent-contrast: #ffffff;
+  --accent-soft: rgba(31, 71, 176, 0.09);
+  --accent-glow: rgba(31, 71, 176, 0.05);
+
+  --live: #1c7a3e;
+  --danger: #b3261e;
+
+  --float-shadow: 0 22px 50px -26px rgba(21, 35, 26, 0.3), 0 2px 6px rgba(21, 35, 26, 0.08);
+  --btn-shadow: 0 10px 22px -14px rgba(31, 71, 176, 0.7);
+}
+
 /* Wide screens get a wider container. */
 @media (min-width: 1440px) {
   :root {

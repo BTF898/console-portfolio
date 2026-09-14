@@ -55,8 +55,9 @@ export const SITE = {
 
   /* ----- Theming ----- */
   theme: {
-    /** Color preset: 'forest' (green + periwinkle) or 'midnight' (slate + cyan). */
-    preset: 'forest' as 'forest' | 'midnight',
+    /** Color preset: 'forest' (green + periwinkle), 'midnight' (slate + cyan),
+        or 'reference' (the DESIGN-ANALYSIS.md reconstruction — this branch). */
+    preset: 'reference' as 'forest' | 'midnight' | 'reference',
     /** Default color mode before the visitor toggles: 'dark' | 'light'. */
     mode: 'dark' as 'dark' | 'light',
   },
