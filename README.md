@@ -2,76 +2,72 @@
 
 A sellable, self-hosted portfolio template in the "engineer's console" style: blueprint-grid paper, a self-typing terminal, animated architecture diagrams, a live GitHub heatmap, a ⌘K command palette, exploration achievements, and a design-token theming system.
 
+> **Note:** This repo also contains a second, independent portfolio site ("Atelier") with a light editorial/Swiss UI and a real backend. See the scripts table below.
+
 **Built for three audiences at once:**
 
 1. **You**, deploying a portfolio in minutes.
-2. **Non-technical buyers**, editing everything through one config file, a CMS, or the GitHub web editor — no code, no command line.
-3. **Developers**, who get a clean Astro codebase with zero framework lock-in to extend however they want.
+2. **Non-technical buyers**, editing everything through one config file per app — no code, no command line.
+3. **Developers**, who get a clean Astro codebase with zero framework lock‑in to extend however they want.
 
 ---
 
-## Why this stack (the 30-second version)
+## Why this stack (the 30‑second version)
 
 - **Astro 5** prerenders every page to real HTML → crawlable by search engines, fast on any device (the analyzed original shipped an empty `<body>` + a ~530 KB JS bundle; this template ships full content with **~20 KB of JS total**).
 - **Content collections** = "add a file, get a project." Schemas validate at build time with readable errors.
 - **Vanilla TypeScript islands** — the terminal, palette, search and timeline are small scripts; there is no React/Vue runtime to ship.
-- **One CSS token file** drives every color, radius, shadow and theme.
+- **One CSS token file per app** drives every color, radius, shadow and theme.
 
 ---
 
 ## Quickstart
 
-<!-- One-click deploys — point the button URLs at your repo after forking. -->
-<p>
-  <a href="https://app.netlify.com/start/git/repo?a=rollup-adapter" target="_blank" rel="noopener"><img alt="Deploy to Netlify" src="https://www.netlify.com/img/deploy/button.svg" height="32"></a>
-  &nbsp;
-  <a href="https://vercel.com/new/clone" target="_blank" rel="noopener"><img alt="Deploy to Vercel" src="https://img.shields.io/badge/Deploy-Vercel-000?logo=vercel" height="32"></a>
-</p>
-
 You need [Node.js 20+](https://nodejs.org) installed. Then:
 
 ```bash
-# 1. install dependencies
+# 1. install dependencies (workspaces)
 npm install
 
-# 2. start the dev server → http://localhost:4321
+# 2. start both dev servers → http://localhost:4321 (Console) + http://localhost:4322 (Atelier)
 npm run dev
 
-# 3. make it yours — edit ONE file in any text editor:
-#    src/config/site.ts   (name, role, socials, skills, theme, …)
-#
-# 4. edit content files (any editor, or the GitHub website):
-#    src/content/projects/*.mdx     your work
-#    src/content/experience/*.md    your jobs
-#    src/content/lab/*.md           your experiments
+# 3. make it yours — edit ONE config file per app:
+#    apps/console/src/config/site.ts   (Console)
+#    apps/atelier/src/config/site.ts   (Atelier)
 
-# 5. build the production site into dist/
+# 4. edit content files (any editor, or the GitHub website):
+#    apps/console/src/content/projects/*.mdx     Console work
+#    apps/console/src/content/experience/*.md    Console jobs
+#    apps/atelier/src/content/projects/*.mdx     Atelier work
+#    apps/atelier/src/content/experience/*.md    Atelier jobs
+
+# 5. build the production sites into dist/
 npm run build
 ```
 
 > **No command line at all?** Fork or "Use this template" on GitHub, then edit
-> files through github.com's built-in web editor (press `.` on your repo to
+> files through github.com's built‑in web editor (press `.` on your repo to
 > open VS Code in the browser, or just click the ✏️ pencil on any file).
-> Every commit auto-deploys when the repo is connected to a host — see
+> Every commit auto‑deploys when the repo is connected to a host — see
 > [docs/deployment.md](docs/deployment.md).
 
 ---
 
-## Second site: Atelier (`sites/editorial/`)
+## Scripts
 
-This repo also contains a second, independent portfolio site with a completely
-different look — **light editorial/Swiss** (serif display headings, warm
-paper, one rust accent, numbered sections) — and a **real backend**: Astro
-Node-adapter API routes with SQLite for a spam-filtered contact form, a
-token-gated admin inbox (`/admin/inbox`), a JSON CV endpoint (`/api/cv.json`),
-and a print-optimized `/cv` page focused on measurable accomplishments.
-
-```bash
-npm run dev:editorial      # → http://localhost:4322
-npm run build:editorial    # production build (needs a Node host)
-```
-
-Details, API reference and deployment notes: [docs/atelier.md](docs/atelier.md).
+| Command | What it does |
+|---|---|
+| `npm run dev` | Dev server with hot reload at `localhost:4321` (Console) + `localhost:4322` (Atelier) |
+| `npm run dev:console` | Dev server with hot reload at `localhost:4321` |
+| `npm run dev:atelier` | Dev server with hot reload at `localhost:4322` |
+| `npm run build` | Production build → `apps/console/dist` + `apps/atelier/dist` |
+| `npm run build:console` | Production build → `apps/console/dist` |
+| `npm run build:atelier` | Production build → `apps/atelier/dist` |
+| `npm run preview:console` | Serve the production Console build locally |
+| `npm run preview:atelier` | Serve the production Atelier build locally |
+| `npm run og` | Regenerate the placeholder `public/og.png` social-preview image |
+| `npm run install-scripts` | Approve native‑module install scripts (esbuild, sharp, better-sqlite3) |
 
 ---
 
@@ -79,65 +75,40 @@ Details, API reference and deployment notes: [docs/atelier.md](docs/atelier.md).
 
 | Section | Powered by | Edit it in |
 |---|---|---|
-| Hero (avatar, name reveal, rotating roles, status) | `src/config/site.ts` | `site.ts` |
-| Self-typing terminal | `src/config/terminal.ts` | `terminal.ts` |
-| Skills marquee | `src/config/site.ts` → `skills` | `site.ts` |
-| About + ID-card facts | `src/config/site.ts` → `about`, `facts` | `site.ts` |
-| Capability panels (3 cards) | `src/config/site.ts` → `panels` | `site.ts` |
-| Featured projects + animated diagrams | `src/content/projects/*.mdx` | content files |
-| Request-flow strip | `src/config/flow.ts` | `flow.ts` |
-| GitHub heatmap + stats | `site.githubUsername` (fetched at **build** time) | `site.ts` |
-| Lab (searchable experiments) | `src/content/lab/*.md` | content files |
-| Experience timeline | `src/content/experience/*.md` | content files |
-| More-projects grid | non-`featured` files in `projects/` | content files |
-| Contact (email, copy button, form) | `site.ts` → `email`, `contact.formEndpoint` | `site.ts` |
-| ⌘K command palette | rendered from config automatically | nothing to edit |
-| Exploration achievements | `src/config/achievements.ts` | `achievements.ts` |
+| Console hero (avatar, name reveal, rotating roles, status) | `apps/console/src/config/site.ts` | `site.ts` |
+| Console self‑typing terminal | `apps/console/src/config/terminal.ts` | `terminal.ts` |
+| Console skills marquee | `apps/console/src/site.ts` → `skills` | `site.ts` |
+| Console about + ID‑card facts | `apps/console/src/site.ts` → `about`, `facts` | `site.ts` |
+| Console capability panels (3 cards) | `apps/console/src/site.ts` → `panels` | `site.ts` |
+| Console featured projects + animated diagrams | `apps/console/src/content/projects/*.mdx` | content files |
+| Console request‑flow strip | `apps/console/config/flow.ts` | `flow.ts` |
+| Console GitHub heatmap + stats | `site.githubUsername` (fetched at **build** time) | `site.ts` |
+| Console lab (searchable experiments) | `apps/console/src/content/lab/*.md` | content files |
+| Console experience timeline | `apps/console/src/content/experience/*.md` | content files |
+| Console more‑projects grid | non‑`featured` files in `projects/` | content files |
+| Console contact (email, copy button, form) | `apps/console/src/site.ts` → `email`, `contact.formEndpoint` | `site.ts` |
+| Console ⌘K command palette | rendered from config automatically | nothing to edit |
+| Console exploration achievements | `apps/console/config/achievements.ts` | `achievements.ts` |
+| Atelier hero (name reveal, role) | `apps/atelier/src/config/site.ts` | `site.ts` |
+| Atelier selected work index list | `apps/atelier/src/content/projects/*.mdx` | content files |
+| Atelier experience with metric chips | `apps/atelier/src/content/experience/*.md` | content files |
+| Atelier capabilities | `apps/atelier/src/site.ts` → `skills` | `site.ts` |
+| Atelier contact (form → API, rate‑limit, inbox) | `apps/atelier/src/scripts/contact-form.ts` | contact‑form TS |
+| Atelier inbox (mark read/delete, token gate) | `apps/atelier/src/scripts/inbox-admin.ts` | inbox‑admin TS |
+| Atelier capabilities panels | `apps/atelier/src/site.ts` → `panels` | `site.ts` |
 
-Feature switches live in `site.features` — flip `terminal`, `commandPalette`, `flow`, `github` or `achievements` to `false` and the whole section disappears cleanly.
+Feature switches live in each app's `site.features` — flip `terminal`, `commandPalette`, `flow`, `github` or `achievements` to `false` and the whole section disappears cleanly.
 
 ---
 
-## The golden rules
+## Second site: Atelier (`apps/atelier/`)
 
-1. **`src/config/site.ts` is the only file most people ever need to touch.** Everything reads from it.
-2. **Content = files.** One markdown file per project/job/experiment. Add, edit, delete files — the page rebuilds itself.
-3. **Design = tokens.** All colors/radii/shadows live in `src/styles/tokens.css`. Never hard-code a color in a component.
-4. **Builds don't lie.** Content schemas are validated on every build — a missing field fails loudly with the file and field named, never silently breaks the page.
+This repo also contains a second, independent portfolio site with a completely different look — **light editorial/Swiss** (serif display headings, warm paper, one rust accent, numbered sections) — and a **real backend**: Astro Node‑adapter API routes with SQLite for a spam‑filtered contact form, a token‑gated admin inbox (`/admin/inbox`), a JSON CV endpoint (`/api/cv.json`), and a print‑optimized `/cv` page focused on measurable accomplishments.
 
-## Documentation map
+```bash
+npm run dev:atelier      # → http://localhost:4322
+npm run build:atelier    # production build (needs a Node host)
+```
 
-| Doc | Read it when you want to… |
-|---|---|
-| [AGENTS.md](AGENTS.md) | **AI coding agents start here** — rules, recipes, verification steps for working on this repo |
-| [docs/content.md](docs/content.md) | add projects/jobs/lab items, build diagrams, add a blog later |
-| [docs/theming.md](docs/theming.md) | change colors, create a preset, adjust type & spacing |
-| [docs/deployment.md](docs/deployment.md) | deploy, set a domain, wire the contact form, enable the CMS |
-| [docs/atelier.md](docs/atelier.md) | the second site in `sites/editorial/` — editorial UI + backend API, CV endpoints, inbox |
-| [docs/selling.md](docs/selling.md) | package, license and support this as a product |
-
-## Scripts
-
-| Command | What it does |
-|---|---|
-| `npm run dev` | Dev server with hot reload at `localhost:4321` |
-| `npm run build` | Production build → `dist/` (also regenerates `robots.txt` + sitemap) |
-| `npm run preview` | Serve the production build locally |
-| `npm run og` | Regenerate the placeholder `public/og.png` social-preview image |
-| `npm run dev:editorial` | Atelier (second site) dev server at `localhost:4322` |
-| `npm run build:editorial` | Build Atelier → `sites/editorial/dist` |
-| `npm run preview:editorial` | Serve Atelier's production build (Node server) |
-
-## Quality you inherit
-
-- Real HTML for every section (SEO, no-JS visitors, screen readers)
-- Open Graph + Twitter card tags, canonical URLs, JSON-LD `Person` schema, sitemap, robots.txt — all generated from config
-- `prefers-reduced-motion` support in every animated component (the marquee reflows to a static row; the terminal renders instantly)
-- Skip-link, focus-visible styles, semantic landmarks, `aria-hidden` on decorative layers
-- Theme persistence without flash-of-wrong-theme (inline bootstrap script)
-- Self-hosted variable fonts (Recursive + JetBrains Mono) — zero font CDN requests
-- **Runs for $0, forever**: the whole site is ~0.5 MB of static files with ~20 KB of JS and no backend — free tiers on Cloudflare/Netlify/Vercel/GitHub Pages cover roughly 200k+ page views a month (see [docs/deployment.md](docs/deployment.md))
-
-## Credits & provenance
-
-The design *patterns* (terminal hero, palette, heatmap, grid paper) are inspired by the current generation of engineer portfolios, including [amantiwari.co.in](https://amantiwari.co.in/) — analyzed in [DESIGN-ANALYSIS.md](DESIGN-ANALYSIS.md). **All code, content and visual identity in this template are original.** It is not affiliated with, endorsed by, or derived from that site's code. The demo persona ("Sam Rivera") and all projects are fictional placeholders — replace them.
+Details, API reference and deployment notes: [docs/atelier.md](docs/atelier.md).
+---

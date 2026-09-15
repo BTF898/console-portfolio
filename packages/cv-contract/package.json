@@ -1,0 +1,13 @@
+{
+  "name": "@portfolio/cv-contract",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Shared CV contract: the /api/cv.json response schema, inferred types, and date formatters. Consumed by apps/atelier (API route + CV page); any future app or service that renders or fetches the CV uses the same source of truth.",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "zod": "^3.24.1"
+  }
+}

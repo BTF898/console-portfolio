@@ -1,11 +1,9 @@
-# build output
+# build output (matches dist/ and .astro/ at any depth, including apps/*)
 dist/
 .astro/
-sites/editorial/dist/
-sites/editorial/.astro/
 
-# atelier (sites/editorial) local database
-sites/editorial/data/
+# atelier local database (apps/atelier)
+apps/atelier/data/
 
 # dependencies
 node_modules/

@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 import { SITE } from '../config/site';
 import { getExperience, getProjects } from '../lib/cv';
-import { formatRange } from '../lib/dates';
+import { formatRange } from '@portfolio/cv-contract';
 
 const projects = await getProjects();
 const experience = await getExperience();
