@@ -1,23 +1,32 @@
 {
-  "name": "console-portfolio-template",
+  "name": "portfolio-monorepo",
   "version": "1.1.0",
-  "description": "Console — a sellable portfolio template for engineers. Astro + content collections + vanilla TS islands. Anyone can edit content without touching code.",
+  "description": "Monorepo root — orchestration only. The sites live in apps/ (console: dark terminal UI, atelier: editorial UI + backend), shared packages in packages/. Each app builds and deploys independently.",
   "type": "module",
   "private": true,
   "engines": {
     "node": ">=20"
   },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview",
-    "og": "node scripts/generate-og.mjs"
+    "dev": "concurrently -n console,atelier -c blue,green \"npm:dev:console\" \"npm:dev:atelier\"",
+    "build": "npm run build:console && npm run build:atelier",
+    "dev:console": "npm run dev --workspace @console/site",
+    "build:console": "npm run build --workspace @console/site",
+    "preview:console": "npm run preview --workspace @console/site",
+    "dev:atelier": "npm run dev --workspace @atelier/site",
+    "build:atelier": "npm run build --workspace @atelier/site",
+    "preview:atelier": "npm run preview --workspace @atelier/site"
   },
-  "dependencies": {
-    "@astrojs/mdx": "^4.0.0",
-    "@astrojs/sitemap": "^3.0.0",
-    "@fontsource-variable/jetbrains-mono": "^5.2.0",
-    "@fontsource-variable/recursive": "^5.2.0",
-    "astro": "^5.0.0"
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  },
+  "allowScripts": {
+    "esbuild": true,
+    "sharp": true,
+    "better-sqlite3": true
   }
 }

@@ -1,0 +1,37 @@
+---
+import Base from '../../layouts/Base.astro';
+---
+
+<Base title="Inbox — Atelier admin">
+  <main>
+    <div class="wrap">
+      <section class="section" style="border-top: 0;">
+        <div class="section-head">
+          <h2>Inbox</h2>
+          <span class="rule" aria-hidden="true"></span>
+          <span class="kicker" id="inbox-count"></span>
+        </div>
+
+        <div id="inbox-login" class="inbox-login" hidden>
+          <p class="section-lede">
+            Enter the admin token (set as <code>ADMIN_TOKEN</code> on the server).
+          </p>
+          <div class="field">
+            <label for="token">Admin token</label>
+            <input id="token" type="password" autocomplete="off" />
+          </div>
+          <button class="btn" id="login-btn">Unlock</button>
+        </div>
+
+        <div id="inbox-panel" hidden>
+          <ul class="inbox-list" id="inbox-list"></ul>
+          <p style="margin-top: 1.5rem;">
+            <button class="btn ghost" id="logout-btn">Lock again</button>
+          </p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script src="../../scripts/inbox-admin.ts"></script>
+</Base>

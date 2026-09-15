@@ -1,0 +1,59 @@
+---
+import '@fontsource-variable/inter';
+import '@fontsource-variable/fraunces';
+import '../styles/tokens.css';
+import '../styles/base.css';
+import '../styles/editorial.css';
+import { SITE } from '../config/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = SITE.seo.title,
+  description = SITE.seo.description,
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site ?? SITE.url);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta name="generator" content={Astro.generator} />
+  </head>
+  <body>
+    <header class="site-head no-print">
+      <div class="wrap">
+        <a class="wordmark" href="/">{SITE.firstName}<em>.</em></a>
+        <nav class="site-nav" aria-label="Main">
+          <a href="/#work">Work</a>
+          <a href="/#experience">Experience</a>
+          <a href="/cv">CV</a>
+          <a href="/#contact">Contact</a>
+        </nav>
+      </div>
+    </header>
+
+    <slot />
+
+    <footer class="site-foot no-print">
+      <div class="wrap">
+        <span>© {new Date().getFullYear()} {SITE.name}</span>
+        <span>{SITE.location}</span>
+        <a href="/admin/inbox">Inbox</a>
+      </div>
+    </footer>
+  </body>
+</html>

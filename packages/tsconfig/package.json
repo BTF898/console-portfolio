@@ -1,0 +1,6 @@
+{
+  "name": "@portfolio/tsconfig",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Shared TypeScript bases for every app in the monorepo."
+}

@@ -1,6 +1,9 @@
-# build output
+# build output (matches dist/ and .astro/ at any depth, including apps/*)
 dist/
 .astro/
+
+# atelier local database (apps/atelier)
+apps/atelier/data/
 
 # dependencies
 node_modules/
@@ -20,3 +23,6 @@ Thumbs.db
 .idea/
 .vscode/*
 !.vscode/extensions.json
+
+# zcode session artifacts
+.zcode/

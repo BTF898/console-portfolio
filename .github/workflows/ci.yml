@@ -15,6 +15,7 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      # Every app must build: console (root template) and atelier.
       - run: npm run build
       # Keep the template honest: fail CI if a change tanks the Lighthouse score.
       # Optional — enable after adding the Lighthouse CI action for your repo.
