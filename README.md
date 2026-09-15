@@ -91,6 +91,7 @@ Feature switches live in `site.features` — flip `terminal`, `commandPalette`, 
 
 | Doc | Read it when you want to… |
 |---|---|
+| [AGENTS.md](AGENTS.md) | **AI coding agents start here** — rules, recipes, verification steps for working on this repo |
 | [docs/content.md](docs/content.md) | add projects/jobs/lab items, build diagrams, add a blog later |
 | [docs/theming.md](docs/theming.md) | change colors, create a preset, adjust type & spacing |
 | [docs/deployment.md](docs/deployment.md) | deploy, set a domain, wire the contact form, enable the CMS |
