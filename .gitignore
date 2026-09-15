@@ -1,6 +1,11 @@
 # build output
 dist/
 .astro/
+sites/editorial/dist/
+sites/editorial/.astro/
+
+# atelier (sites/editorial) local database
+sites/editorial/data/
 
 # dependencies
 node_modules/
@@ -20,3 +25,6 @@ Thumbs.db
 .idea/
 .vscode/*
 !.vscode/extensions.json
+
+# zcode session artifacts
+.zcode/

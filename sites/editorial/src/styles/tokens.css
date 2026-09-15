@@ -1,0 +1,39 @@
+/* Atelier design tokens — every color the site uses lives here.
+   Warm paper, near-black ink, one rust accent. Light-only by design. */
+:root {
+  /* surfaces */
+  --paper: #f6f3ec;
+  --paper-raised: #fffdf8;
+  --paper-dim: #efebe1;
+
+  /* ink */
+  --ink: #1a1712;
+  --ink-soft: #55503f;
+  --ink-faint: #918a79;
+
+  /* lines */
+  --line: #ddd6c6;
+  --line-strong: var(--ink);
+
+  /* accent */
+  --accent: #a63a10;
+  --accent-soft: #f2e0d3;
+  --on-accent: #fffdf8;
+
+  /* type */
+  --serif: 'Fraunces Variable', 'Fraunces', Georgia, 'Times New Roman', serif;
+  --sans: 'Inter Variable', 'Inter', system-ui, -apple-system, sans-serif;
+
+  --text-xs: 0.72rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.2rem;
+
+  --tracking-wide: 0.14em;
+  --tracking-wider: 0.22em;
+
+  --maxw: 69rem;
+  --gutter: clamp(1.1rem, 4vw, 2.5rem);
+
+  --ease: cubic-bezier(0.2, 0.6, 0.2, 1);
+}

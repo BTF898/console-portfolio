@@ -57,6 +57,24 @@ npm run build
 
 ---
 
+## Second site: Atelier (`sites/editorial/`)
+
+This repo also contains a second, independent portfolio site with a completely
+different look — **light editorial/Swiss** (serif display headings, warm
+paper, one rust accent, numbered sections) — and a **real backend**: Astro
+Node-adapter API routes with SQLite for a spam-filtered contact form, a
+token-gated admin inbox (`/admin/inbox`), a JSON CV endpoint (`/api/cv.json`),
+and a print-optimized `/cv` page focused on measurable accomplishments.
+
+```bash
+npm run dev:editorial      # → http://localhost:4322
+npm run build:editorial    # production build (needs a Node host)
+```
+
+Details, API reference and deployment notes: [docs/atelier.md](docs/atelier.md).
+
+---
+
 ## What's in the box
 
 | Section | Powered by | Edit it in |
@@ -95,6 +113,7 @@ Feature switches live in `site.features` — flip `terminal`, `commandPalette`, 
 | [docs/content.md](docs/content.md) | add projects/jobs/lab items, build diagrams, add a blog later |
 | [docs/theming.md](docs/theming.md) | change colors, create a preset, adjust type & spacing |
 | [docs/deployment.md](docs/deployment.md) | deploy, set a domain, wire the contact form, enable the CMS |
+| [docs/atelier.md](docs/atelier.md) | the second site in `sites/editorial/` — editorial UI + backend API, CV endpoints, inbox |
 | [docs/selling.md](docs/selling.md) | package, license and support this as a product |
 
 ## Scripts
@@ -105,6 +124,9 @@ Feature switches live in `site.features` — flip `terminal`, `commandPalette`, 
 | `npm run build` | Production build → `dist/` (also regenerates `robots.txt` + sitemap) |
 | `npm run preview` | Serve the production build locally |
 | `npm run og` | Regenerate the placeholder `public/og.png` social-preview image |
+| `npm run dev:editorial` | Atelier (second site) dev server at `localhost:4322` |
+| `npm run build:editorial` | Build Atelier → `sites/editorial/dist` |
+| `npm run preview:editorial` | Serve Atelier's production build (Node server) |
 
 ## Quality you inherit
 

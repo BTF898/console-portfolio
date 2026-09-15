@@ -7,11 +7,19 @@
   "engines": {
     "node": ">=20"
   },
+  "workspaces": [
+    "sites/*"
+  ],
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "og": "node scripts/generate-og.mjs"
+    "og": "node scripts/generate-og.mjs",
+    "dev:console": "astro dev",
+    "build:console": "astro build",
+    "dev:editorial": "npm run dev --workspace @atelier/site",
+    "build:editorial": "npm run build --workspace @atelier/site",
+    "preview:editorial": "npm run preview --workspace @atelier/site"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.0.0",
@@ -19,5 +27,11 @@
     "@fontsource-variable/jetbrains-mono": "^5.2.0",
     "@fontsource-variable/recursive": "^5.2.0",
     "astro": "^5.0.0"
+  },
+  "allowScripts": {
+    "esbuild@0.27.7": true,
+    "esbuild@0.25.12": true,
+    "sharp@0.34.5": true,
+    "better-sqlite3@12.11.1": true
   }
 }

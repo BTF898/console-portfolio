@@ -1,0 +1,98 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../config/site';
+import { getExperience } from '../lib/cv';
+import { formatRange } from '../lib/dates';
+
+const experience = await getExperience();
+---
+
+<Base title={`CV — ${SITE.name}`} description={SITE.summary}>
+  <main class="cv">
+    <div class="wrap">
+      <div class="cv-toolbar no-print">
+        <a class="kicker" href="/">← Back to site</a>
+        <button class="btn ghost" id="print-btn">Print / Save as PDF</button>
+      </div>
+
+      <h1 class="cv-title">{SITE.name}</h1>
+      <p class="cv-headline">
+        <span class="kicker">{SITE.role}</span>
+        <span class="kicker">{SITE.location}</span>
+        <span class="kicker">
+          <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+        </span>
+      </p>
+      <p class="cv-summary">{SITE.summary}</p>
+
+      <section class="cv-section">
+        <span class="kicker">Experience</span>
+        {
+          experience.map((entry) => (
+            <article class="xp-entry">
+              <div class="xp-head">
+                <h3>
+                  {entry.data.company} <span class="role">— {entry.data.role}</span>
+                </h3>
+                <span class="dates">{formatRange(entry.data.start, entry.data.end)}</span>
+              </div>
+              {entry.data.location && <p class="xp-sub">{entry.data.location}</p>}
+              <ul class="highlights">
+                {entry.data.highlights.map((h) => (
+                  <li>
+                    <span>{h.text}</span>
+                    {h.metric && <span class="chip">{h.metric}</span>}
+                  </li>
+                ))}
+              </ul>
+            </article>
+          ))
+        }
+      </section>
+
+      <section class="cv-section">
+        <span class="kicker">Skills</span>
+        <div class="skills-grid">
+          {
+            SITE.skills.map((group) => (
+              <div>
+                <h3>{group.group}</h3>
+                <ul>
+                  {group.items.map((item) => (
+                    <li>{item}</li>
+                  ))}
+                </ul>
+              </div>
+            ))
+          }
+        </div>
+      </section>
+
+      <section class="cv-section">
+        <span class="kicker">Education</span>
+        {
+          SITE.education.map((e) => (
+            <article class="xp-entry">
+              <div class="xp-head">
+                <h3>{e.school}</h3>
+                <span class="dates">
+                  {e.start} — {e.end}
+                </span>
+              </div>
+              <p class="xp-sub">
+                {e.degree}
+                {e.note && ` · ${e.note}`}
+              </p>
+            </article>
+          ))
+        }
+      </section>
+    </div>
+  </main>
+
+  <script>
+    document.getElementById('print-btn')?.addEventListener('click', () => {
+      window.print();
+    });
+  </script>
+</Base>

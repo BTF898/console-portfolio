@@ -5,6 +5,16 @@ with Astro 5. Everything a visitor sees comes from files in this repo; there
 is no backend, no database, and no runtime API. The output of `npm run build`
 is a `dist/` folder of static files that any static host can serve.
 
+> **Note (two sites in one repo):** `sites/editorial/` is a second, separate
+> Astro site ("Atelier") with its own UI, config, content and a real backend
+> (Node adapter + SQLite API routes). The rules below apply to the root
+> Console site; Atelier has its own `sites/editorial/src/config/site.ts` and
+> its own `sites/editorial/src/styles/tokens.css` (same token discipline).
+> Atelier runs on port 4322 (`npm run dev:editorial` / `build:editorial`);
+> see `docs/atelier.md`. If you touch only root files, `npm run build` is
+> still the gate; if you touch Atelier, `npm run build:editorial` must also
+> pass.
+
 If you can follow the recipes below, you can do any task on this repo. When
 in doubt: make the change, run `npm run build`, and it must pass.
 
@@ -158,6 +168,7 @@ functions, no database.
 - `docs/content.md` — full field reference + expansion ideas (blog, case studies)
 - `docs/theming.md` — token anatomy, how to create a fourth preset
 - `docs/deployment.md` — hosts, domains, forms, CMS, cost breakdown
+- `docs/atelier.md` — the second site in `sites/editorial/` (editorial UI + backend)
 - `docs/selling.md` — packaging this as a product
 - `DESIGN-ANALYSIS.md` — the design teardown that inspired the template
 - `CHANGELOG.md` — release history (currently v1.1.0)
